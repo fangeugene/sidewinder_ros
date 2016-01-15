@@ -13,12 +13,16 @@ ser = serial.Serial(port="/dev/ttyO4", baudrate=115200)
 
 
 def callback(twist):
-    x = twist.linear.x * 250
-    y = twist.linear.y * 250
-    rot_vel = twist.angular.z * 200
+    x = twist.linear.x * 100
+    y = twist.linear.y * 100
+    rot_vel = twist.angular.z * 100
+
+    if rot_vel < 25 and rot_vel > -25:
+        rot_vel = 0
     
     t_mag_setp = math.sqrt(math.pow(x, 2) + math.pow(y, 2))
     t_head_setp = math.atan2(y, x)
+
     if x <= 0:
         t_head_setp += math.pi
     if t_head_setp > math.pi:
