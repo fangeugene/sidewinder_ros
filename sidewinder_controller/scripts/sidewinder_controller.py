@@ -21,19 +21,25 @@ def callback(twist):
         rot_vel = 0
     
     t_mag_setp = math.sqrt(math.pow(x, 2) + math.pow(y, 2))
-    t_head_setp = math.atan2(y, x)
 
-    if x <= 0:
-        t_head_setp += math.pi
-    if t_head_setp > math.pi:
-        t_head_setp -= 2 * math.pi
-    t_head_setp = t_head_setp * 180 / math.pi
+    if round(x) == 0 and round(y) == 0:
+        t_mag_setp = 1
+        t_head_setp = 0
+    else:
+        t_head_setp = math.atan2(y, x)
+
+        #if x <= 0:
+        #    t_head_setp += math.pi
+        #if t_head_setp > math.pi:
+        #    t_head_setp -= 2 * math.pi
+        t_head_setp = t_head_setp * 180 / math.pi
 
     msg = '1 %03d %03d %03d\n' % (t_mag_setp, t_head_setp + 500, rot_vel + 500)
     #rospy.logerr(msg)
     ser.write(msg)
     ser.write('9\n')  # watchdog
     ser.write('0 1\n')  # enable
+    #ser.write('8 0\n')  # world centric
 
 
 def talker():
@@ -56,7 +62,7 @@ def talker():
         #joint_states = [joint_states[1], joint_states[3], joint_states[5]]
         #rospy.logerr(joint_states)
         joint_state_msg.header.stamp = rospy.Time.now()
-        joint_state_msg.position = [float(i) * math.pi / 1800.0 for i in joint_states]
+        joint_state_msg.position = [float(i) * math.pi / 180.0 for i in joint_states]
         pub.publish(joint_state_msg)
 
         rate.sleep()
