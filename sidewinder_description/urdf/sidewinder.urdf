@@ -1,0 +1,52 @@
+<robot name="sidewinder">
+  <link name="base_link">
+    <visual>
+      <origin rpy="-1.5708 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://sidewinder_description/meshes/base_link.dae"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="module1_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://sidewinder_description/meshes/module_link.dae"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="module2_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://sidewinder_description/meshes/module_link.dae"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="module3_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://sidewinder_description/meshes/module_link.dae"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="joint1" type="continuous">
+    <parent link="base_link"/>
+    <child link="module1_link"/>
+    <origin xyz="0.2032 0 0" />
+    <axis xyz="0 0 1" />
+  </joint>
+
+  <joint name="joint2" type="continuous">
+    <parent link="base_link"/>
+    <child link="module2_link"/>
+    <origin xyz="-0.1016 -0.17598 0" />
+    <axis xyz="0 0 1" />
+  </joint>
+
+  <joint name="joint3" type="continuous">
+    <parent link="base_link"/>
+    <child link="module3_link"/>
+    <origin xyz="-0.1016 0.17598 0" />
+    <axis xyz="0 0 1" />
+  </joint>
+</robot>
