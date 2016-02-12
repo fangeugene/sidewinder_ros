@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 
+import serial
 import rospy
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
+
+ser = serial.Serial(port="/dev/ttyO4", baudrate=115200)
 
 def talker():
     pub = rospy.Publisher('joint_states', JointState, queue_size=10)
@@ -15,13 +18,13 @@ def talker():
     joint_state_msg.velocity = []
     joint_state_msg.effort = []
 
-    position = [0, 0, 0]
     while not rospy.is_shutdown():
+        ser_line = None
+        while ser_line is None or ser_line[0] != '2':
+            ser_line = ser.readline()
+        joint_states = ser_line.split(' ')[1:]
         joint_state_msg.header.stamp = rospy.Time.now()
-        position[0] += 0.01
-        position[1] += 0.01
-        position[2] += 0.01
-        joint_state_msg.position = position
+        joint_state_msg.position = [float(i)/10.0 * 3.14159 / 180 for i in joint_states]
         pub.publish(joint_state_msg)
         rate.sleep()
 
